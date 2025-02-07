@@ -2,7 +2,7 @@
   "name": "vs-project-notes",
   "displayName": "VS Project Notes",
   "description": "Allows you to create quick notes related to your project",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "publisher": "PixelFox",
   "engines": {
     "vscode": "^1.96.0"
@@ -35,7 +35,7 @@
       "activitybar": [
         {
           "id": "projectNotes",
-          "title": "VS-Notes",
+          "title": "VS Project Notes",
           "icon": "src/icon.svg"
         }
       ]
@@ -44,7 +44,7 @@
       "projectNotes": [
         {
           "id": "notesSidebar",
-          "name": "Project Notes",
+          "name": "Note Overview",
           "type": "webview"
         }
       ]

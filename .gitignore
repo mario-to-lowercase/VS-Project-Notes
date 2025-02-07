@@ -1,6 +1,7 @@
 out
 node_modules
 *.vsix
+.notes
 .DS_Store
 .vscode
 .vscodeignore
