@@ -23,6 +23,10 @@ VS Project Notes is a lightweight VS Code extension that allows you to take quic
 2. Use the simple built-in interface to create, edit, and switch between note files.
 3. Notes are saved once you press the save button.
 
+## ToDo
+- Button to delete existing note files
+- Functionality to rename existing note files
+- Config file to change the storage location of files (global or per project)
 
 ## Contributing
 
@@ -30,4 +34,4 @@ Contributions are welcome! Feel free to submit issues or feature requests in the
 
 ## Contact
 
-For support or feedback, reach out via [GitHub Issues](https://github.com/your-repo/vs-notes/issues).
+For support or feedback, reach out via [GitHub Issues](https://github.com/mario-to-lowercase/VS-Project-Notes/issues).
