@@ -1,0 +1,78 @@
+{
+  "name": "vs-project-notes",
+  "displayName": "VS Project Notes",
+  "description": "Allows you to create quick notes related to your project",
+  "version": "0.0.1",
+  "publisher": "PixelFox",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "note",
+    "notes"
+  ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "icon": "src/icon.png",
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/mario-to-lowercase/VS-Notes/blob/master/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mario-to-lowercase/VS-Notes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mario-to-lowercase/VS-Notes/issues"
+  },
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "projectNotes",
+          "title": "VS-Notes",
+          "icon": "src/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "projectNotes": [
+        {
+          "id": "notesSidebar",
+          "name": "Project Notes",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "project-notes.createNote",
+        "title": "Create New Note"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "eslint": "^9.19.0",
+    "typescript": "^5.7.3",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}

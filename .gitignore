@@ -1,0 +1,14 @@
+out
+node_modules
+*.vsix
+.DS_Store
+.vscode
+.vscodeignore
+.vscode/**
+.vscode-test/**
+.yarnrc
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/eslint.config.mjs
+**/*.map
+**/.vscode-test.*

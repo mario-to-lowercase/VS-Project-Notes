@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            background-color: var(--vscode-editor-background);
+            color: var(--vscode-editor-foreground);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+        }
+
+        button:hover {
+            background-color: var(--vscode-button-hoverBackground);
+        }
+
+        .show-notes {
+            flex: 1;
+            margin-right: 5px;
+        }
+
+        .new-note {
+            flex: 1;
+            margin-left: 5px;
+        }
+
+        .note-list {
+            background-color: var(--vscode-sideBar-background);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .note-item {
+            padding: 10px;
+        }
+
+        .note-item:hover {
+            cursor: pointer;
+            background-color: var(--vscode-list-hoverBackground);
+        }
+
+        input,
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--vscode-editorWidget-border);
+            border-radius: 5px;
+            background-color: var(--vscode-input-background);
+            color: var(--vscode-input-foreground);
+        }
+
+        .save-note {
+            width: 100%;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .show {
+            display: block!important;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>VS-Notes</h2>
+    <div class="buttons-container">
+        <button class="show-notes" onclick="toggleNotes()">📂 Show Notes</button>
+        <button class="new-note" onclick="clearInputs()">📝 New Note</button>
+    </div>
+    <div class="note-list" id="noteList"></div>
+    <div id="noteInputs" class="hide">
+        <input type="text" id="noteName" placeholder="Enter a note name" />
+        <textarea id="noteContent" placeholder="Write something..." rows="5"></textarea>
+        <button id="saveNote" class="save-note" onclick="saveNote()">💾 Save</button>
+    </div>
+
+    <script>
+        const vscode = acquireVsCodeApi();
+        let notesVisible = false;
+        let currentNote = null;
+
+        function toggleNotes() {
+            console.log('toggleNotes triggered');
+            notesVisible = !notesVisible;
+            const noteList = document.getElementById('noteList');
+            noteList.classList.toggle('show', notesVisible);
+
+            if (notesVisible) {
+                console.log('Fetching notes...');
+                vscode.postMessage({ command: 'fetchNotes' });
+            }
+        }
+
+        function saveNote() {
+            if (!currentNote){
+                saveNewNote();
+            }else{
+                const content = document.getElementById('noteContent').value;
+                vscode.postMessage({ command: 'saveNote', noteName: currentNote, content });
+                document.getElementById('noteInputs').classList.add('hide');
+            }
+            
+        }
+
+        function clearInputs() {
+            document.getElementById('noteName').value = '';
+            document.getElementById('noteContent').value = '';
+            document.getElementById('noteInputs').classList.remove('hide');
+            document.getElementById("saveNote").innerText = "💾 Create Note";
+            hideNoteList();
+        }
+
+        function saveNewNote() {
+            const noteName = document.getElementById('noteName').value;
+            const content = document.getElementById('noteContent').value;
+            vscode.postMessage({ command: 'createNote', noteName, content });
+            document.getElementById('noteInputs').classList.add('hide');
+        }
+
+        function hideNoteList() {
+            const noteList = document.getElementById('noteList');
+            noteList.classList.remove('show');
+            notesVisible = false;
+        }
+
+        window.addEventListener('message', (event) => {
+            const message = event.data;
+
+            if (message.command === 'updateNotesList') {
+                const noteList = document.getElementById('noteList');
+                noteList.innerHTML = '';
+
+                message.notes.forEach(note => {
+                    const noteItem = document.createElement('div');
+                    noteItem.classList.add('note-item');
+                    noteItem.textContent = note;
+                    noteItem.onclick = () => vscode.postMessage({ command: 'fetchNote', noteName: note });
+                    noteList.appendChild(noteItem);
+                });
+            }
+
+            if (message.command === 'displayNote') {
+                hideNoteList();
+                currentNote = message.noteName;
+                document.getElementById('noteName').value = message.noteName;
+                document.getElementById('noteContent').value = message.content || '';
+                document.getElementById('noteInputs').classList.remove('hide');
+                document.getElementById("saveNote").innerText = "💾 Save changes";
+            }
+        });
+    </script>
+</body>
+
+</html>
